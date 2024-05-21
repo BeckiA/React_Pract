@@ -5,11 +5,18 @@ const Form = () => {
    const emailRef= useRef<HTMLInputElement>(null);
    const passRef = useRef<HTMLInputElement>(null);
 
+  const credentials = {
+    email: '',
+    password: ''
+  }
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
         if(emailRef.current !== null)
-             console.log(emailRef.current.value)
-    }
+            credentials.email = emailRef.current.value
+        if(passRef.current !== null)
+             credentials.password = passRef.current.value
+        console.log(credentials)
+      }
   return (
     <form onSubmit={handleSubmit}>
   <div className="mb-3">
