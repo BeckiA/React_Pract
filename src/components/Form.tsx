@@ -1,14 +1,31 @@
 import { FieldValues, useForm } from "react-hook-form"
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+const schema = z.object({
+  email: z.string(
+    {required_error:  "Email is required",
+     invalid_type_error: "Email must be a String" 
+
+    }
+  ).email(
+    {message: "Invalid email address"}
+  ).min(5),
+  password: z.string({required_error:  "Email is required",
+  invalid_type_error: "Email must be a String" 
+}).length(10 ,{message: "Must be exactly 5 characters long"})
+});
+
+type FormData = z.infer<typeof schema>
+
+// After typing this one try to install 
+// npm i @hookform/resolvers
 
 
 const Form = () => {
 
 
-  interface Props{  
-    email: String,
-    password: String
-  }
-  const {register, handleSubmit, formState : {errors}} = useForm<Props>();
+ 
+  const {register, handleSubmit, formState : {errors}} = useForm<FormData>({resolver: zodResolver(schema)});
   // formState : {errors} : Advanced Destructuring in JS
 
   const onSubmit = (val: FieldValues) => console.log(val);
@@ -21,12 +38,13 @@ const Form = () => {
     <input 
     {...register('email', { required: true, minLength : 3})}
     type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
-   {errors.email?.type === 'required' && <p className="text-danger">The Email Field Is Required</p>}
-{   errors.email?.type === "minLength" && <p className="text-danger">The Email Field Must be atlease 3 Character</p>}
+   {errors.email && <p className="text-danger">{errors.email.message}</p>}
   </div>
   <div className="mb-3">
     <label  htmlFor="exampleInputPassword1" className="form-label">Password</label>
     <input  {...register('password')} type="password" className="form-control" id="exampleInputPassword1" />
+   {errors.password && <p className="text-danger">{errors.password.message}</p>}
+
   </div>
   <button type="submit" className="btn btn-primary">Submit</button>
 </form>
