@@ -25,7 +25,7 @@ const Form = () => {
 
 
  
-  const {register, handleSubmit, formState : {errors}} = useForm<FormData>({resolver: zodResolver(schema)});
+  const {register, handleSubmit, formState : {errors, isValid}} = useForm<FormData>({resolver: zodResolver(schema)});
   // formState : {errors} : Advanced Destructuring in JS
 
   const onSubmit = (val: FieldValues) => console.log(val);
@@ -46,7 +46,7 @@ const Form = () => {
    {errors.password && <p className="text-danger">{errors.password.message}</p>}
 
   </div>
-  <button type="submit" className="btn btn-primary">Submit</button>
+  <button disabled = {!isValid} type="submit" className="btn btn-primary">Submit</button>
 </form>
   )
 }
